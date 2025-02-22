@@ -8,5 +8,7 @@ public class Context : DbContext
     {
     }
 
-    public DbSet<Application> Applications { get; set; }
+    public DbSet<Movie> Movies { get; set; }
+    public DbSet<Category> Categories { get; set; }
 }
+

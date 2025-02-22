@@ -1,71 +1,86 @@
-@model Application
+@model Movie
 
 <div class="container mt-4">
     <div class="text-center">
-        <h1 class="mb-3">Add Movies</h1>
-        <h3 class="mb-4">Use the form below to add a new movie to Joel's collection:</h3>
+        <h1 class="mb-3">@(Model.MovieId == 0 ? "Add Movie" : "Edit Movie")</h1>
+        <h3 class="mb-4">Use the form below to @(Model.MovieId == 0 ? "add a new movie" : "update the movie") in Joel's collection:</h3>
     </div>
 
     <div class="row justify-content-center">
         <div class="col-md-6">
             <form asp-action="Movies" asp-controller="Home" method="post">
-                <!-- Category -->
+                <input type="hidden" asp-for="MovieId" required/> <!-- ✅ Keep MovieId for editing -->
+
+                <!-- Category (Dropdown) -->
                 <div class="mb-3">
-                    <label for="Category" class="form-label">Category</label>
-                    <input type="text" class="form-control" id="Category" name="Category" placeholder="Enter movie category" required>
+                    <label asp-for="CategoryId" class="form-label">Category</label>
+                    <select asp-for="CategoryId" class="form-control" asp-items="@(new SelectList(ViewBag.Categories, "CategoryId", "CategoryName"))" required>
+                        <option value="">Select a category</option>
+                    </select>
                 </div>
 
                 <!-- Title -->
                 <div class="mb-3">
-                    <label for="Title" class="form-label">Title</label>
-                    <input type="text" class="form-control" id="Title" name="Title" placeholder="Enter movie title" required>
+                    <label asp-for="Title" class="form-label"></label>
+                    <input asp-for="Title" class="form-control" placeholder="Enter movie title" required>
                 </div>
 
                 <!-- Year -->
                 <div class="mb-3">
-                    <label for="Year" class="form-label">Year</label>
-                    <input type="text" class="form-control" id="Year" name="Year" placeholder="Enter release year" required>
+                    <label asp-for="Year" class="form-label"></label>
+                    <input asp-for="Year" class="form-control" placeholder="Enter release year" required>
                 </div>
 
                 <!-- Director -->
                 <div class="mb-3">
-                    <label for="Director" class="form-label">Director</label>
-                    <input type="text" class="form-control" id="Director" name="Director" placeholder="Enter director's name" required>
+                    <label asp-for="Director" class="form-label"></label>
+                    <input asp-for="Director" class="form-control" placeholder="Enter director's name">
                 </div>
 
                 <!-- Rating -->
                 <div class="mb-3">
-                    <label for="Rating" class="form-label">Rating</label>
-                    <select class="form-select" id="Rating" name="Rating" required>
+                    <label asp-for="Rating" class="form-label"></label>
+                    <select asp-for="Rating" class="form-select">
                         <option value="">Select rating</option>
-                        <option>G</option>
-                        <option>PG</option>
-                        <option>PG-13</option>
-                        <option>R</option>
+                        @if (ViewBag.Ratings != null)
+                        {
+                            foreach (var rating in ViewBag.Ratings)
+                            {
+                                <option value="@rating">@rating</option>
+                            }
+                        }
                     </select>
                 </div>
 
-                <!-- Edited (Checkbox) -->
+                <!-- Edited Checkbox -->
                 <div class="form-check mb-3">
-                    <input class="form-check-input" type="checkbox" id="Edited" name="Edited">
-                    <label class="form-check-label" for="Edited">Edited</label>
+                    <input asp-for="Edited" class="form-check-input" type="checkbox" value="true">
+                    <label asp-for="Edited" class="form-check-label">Edited</label>
                 </div>
 
                 <!-- Lent To -->
                 <div class="mb-3">
-                    <label for="LentTo" class="form-label">Lent to</label>
-                    <input type="text" class="form-control" id="LentTo" name="LentTo" placeholder="Enter name">
+                    <label asp-for="LentTo" class="form-label"></label>
+                    <input asp-for="LentTo" class="form-control" placeholder="Enter name">
+                </div>
+
+                <!-- Copied to Plex Checkbox -->
+                <div class="form-check mb-3">
+                    <input asp-for="CopiedToPlex" class="form-check-input" type="checkbox" value="true">
+                    <label asp-for="CopiedToPlex" class="form-check-label">Copied to Plex</label>
                 </div>
 
                 <!-- Notes -->
                 <div class="mb-3">
-                    <label for="Notes" class="form-label">Notes</label>
-                    <textarea class="form-control" id="Notes" name="Notes" rows="3" placeholder="Enter notes" maxlength="25"></textarea>
+                    <label asp-for="Notes" class="form-label"></label>
+                    <textarea asp-for="Notes" class="form-control" rows="3" placeholder="Enter notes" maxlength="25"></textarea>
                 </div>
 
                 <!-- Submit Button -->
                 <div class="text-center">
-                    <button type="submit" class="btn btn-primary">Add Movie</button>
+                    <button type="submit" class="btn btn-primary">
+                        @(Model.MovieId == 0 ? "Add Movie" : "Update Movie")
+                    </button>
                 </div>
             </form>
         </div>
