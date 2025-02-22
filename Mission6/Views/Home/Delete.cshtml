@@ -1,0 +1,12 @@
+@model Movie
+
+<h2>Delete Confirmation</h2>
+<h3>Are you sure you want to delete @Model.Title from the movie collection?</h3>
+<form asp-controller="Home" asp-action="DeleteMovie" method="post">
+    <input type="hidden" asp-for="MovieId"/>
+    <button class="btn btn-danger" type="submit">Delete</button>
+    <a class="btn btn-info" asp-controller="Home" asp-action="MovieCollection">Cancel</a>
+</form>
+
+
+
